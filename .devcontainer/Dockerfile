@@ -47,16 +47,17 @@ RUN groupadd --gid $USER_GID $USERNAME && \
 USER $USERNAME
 WORKDIR /home/$USERNAME
 
-# # 创建 Fish 配置目录
-# RUN mkdir -p .config/fish/functions && \
-#     curl -sL https://git.io/fisher > .config/fish/functions/fisher.fish
+# 创建 Fish 配置目录
+RUN mkdir -p .config/fish/functions && \
+    curl -sL https://git.io/fisher > .config/fish/functions/fisher.fish
     
-# 安装 bass 插件
-# RUN /usr/bin/fish -c "fisher install edc/bass"
+
+RUN /usr/bin/fish -c "fisher install edc/bass"
 
 ENV ROS2_DISTRO=humble
 # ENV ROS1_DISTRO=noetic
 ENV ROS2_SETUP_BASH="/opt/ros/humble/setup.bash"
+# ENV ROS2_fish_config="/home/yutou/ros2_ws/.config/fish/completions/ros2.fish"
 # ENV ROS1_SETUP_BASH="/opt/ros/noetic/setup.bash"
 # ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 # ENV ROBOSENSE_AIRY_BASH="~/ros2_ws/packages/AIRY/install/setup.bash"
@@ -67,13 +68,16 @@ RUN echo "source $ROS2_SETUP_BASH" >> /home/$USERNAME/.bashrc && \
     # echo "source $ROS1_SETUP_BASH" >> /home/$USERNAME/.bashrc && \
     # echo "source $ROBOSENSE_AIRY_BASH" >> /home/$USERNAME/.bashrc && \
     # echo "source $ROS1_BRIDGE_BASH" >> /home/$USERNAME/.bashrc 
-    echo "source /home/yutou/ros2_ws/install/setup.bash" >> /home/$USERNAME/.bashrc 
-#     echo "source /home/yutou/packages/lidar_ros_ws/install/setup.bash" >> /home/$USERNAME/.bashrc && \
+    echo "source /home/yutou/ros2_ws/install/setup.bash" >> /home/$USERNAME/.bashrc && \
+    echo "source /home/yutou/ros2_ws/.config/fish/completions/ros2.fish" >> /home/$USERNAME/.config/fish/config.fish && \
+    echo 'bass source /home/yutou/ros2_ws/install/setup.bash' >> /home/$USERNAME/.config/fish/config.fish 
+    # echo "source $ROS2_fish_config" >> /home/$USERNAME/.bashrc
+    # echo "source /home/yutou/packages/lidar_ros_ws/install/setup.bash" >> /home/$USERNAME/.bashrc 
 #     echo "source /home/yutou/packages/ws_livox/install/local_setup.bash" >> /home/$USERNAME/.bashrc
 
 # # # 为fish用户配置ROS环境（可选）
 # RUN echo 'bass source /opt/ros/humble/setup.bash' >> /home/$USERNAME/.config/fish/config.fish && \
-#     echo 'bass source ~/ros2_ws/install/setup.bash' >> /home/$USERNAME/.config/fish/config.fish && \
+    
 #     echo 'source ~/ros2_ws/.config/fish/completions/ros2.fish' >> /home/$USERNAME/.config/fish/config.fish
 
 
